@@ -7,7 +7,7 @@ import Navbar from './components/Navbar'
 function App() {
 
   return (
-    <div className="bg-gray-200 min-h-screen">
+    <div className="bg-[#f1f1f1] min-h-screen">
       <BrowserRouter>
         <div className='sticky top-0' >
           <Navbar />
