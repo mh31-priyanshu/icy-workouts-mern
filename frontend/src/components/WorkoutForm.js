@@ -1,35 +1,37 @@
 import {useState } from "react"
+import { useWorkoutsContext } from "../hooks/useWorkoutsContext"
 
 const WorkoutForm = () => {
+    const { dispatch } = useWorkoutsContext()
+
     const [title, setTitle] = useState('')
     const [load, setLoad] = useState('')
     const [reps, setReps] = useState('')
-    const [error, setError] = useState('')
+    const [error, setError] = useState(null)
 
     const handleSubmit = async (e) => {
         e.preventDefault()
 
         const workout = {title, load, reps}
-
-        const response = await fetch('/api/workouts',{
-            method:'POST',
-            body: JSON.stringify(workout),
-            headers:{
-                'Content-Type' :'application/json'
-            }
+        
+        const response = await fetch('/api/workouts', {
+        method: 'POST',
+        body: JSON.stringify(workout),
+        headers: {
+            'Content-Type': 'application/json'
+        }
         })
-
         const json = await response.json()
 
-        if(!json.ok){
-            setError(json.error)
+        if (!response.ok) {
+        setError(json.error)
         }
-        if(json.ok){
-            setTitle('')
-            setLoad('')
-            setReps('')
-            setError(null)
-            console.log('New Workout added!')
+        if (response.ok) {
+        setError(null)
+        setTitle('')
+        setLoad('')
+        setReps('')
+        dispatch({type: 'CREATE_WORKOUT', payload: json})
         }
 
     }
@@ -65,7 +67,7 @@ const WorkoutForm = () => {
                         value={reps}
                     />
                 </div>
-                <button className="bg-green-600 text-white rounded-sm py-2 font-semibold " >Add Workout</button>
+                <button className="bg-teal-600 text-white rounded-sm py-2 font-semibold " >Add Workout</button>
                 {error && <div className="error">{error}</div>}
             </form>
         </div>
